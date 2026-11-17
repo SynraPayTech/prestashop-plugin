@@ -7,7 +7,7 @@ server.
 
 | | |
 |---|---|
-| 📦 Module | `synrapay` v1.0.4 — folder [`synrapay/`](./synrapay), zip `synrapay.zip` |
+| 📦 Module | `synrapay` v1.0.5 — folder [`synrapay/`](./synrapay), zip `synrapay.zip` |
 | 🛒 PrestaShop | 8.0.2 or greater |
 | 🐘 PHP | 7.4 or greater |
 | 🔐 Integration | SynraPay Direct API — hosted session, signature v2 |
@@ -162,6 +162,7 @@ dist/                                     ready-to-install zip
 
 ## 📝 Changelog
 
+- **1.0.5** (2026-11-17) The plugin calls its own door on SynraPay (`/v1/direct/plugins/prestashop`): the bank's 3-D Secure check opens over the checkout page. The module description no longer says "(hosted session)". No schema change (no upgrade script).
 - **1.0.4** (2026-11-14) SynraPay made its card-fields script (sdk.js) internal: a store page that loads it directly now gets "Something went wrong" and no card form. The card form is loaded through SynraPay's public hosted-session.js (SynraHostedSession.mount) instead. Environments are Sandbox and Live only (a store saved on Develop runs as Sandbox). The webhook secret is the one "Webhook secret (KEY_SHA512)" from Developers → API Keys; the per-endpoint Signing secret is gone from the portal. No schema change (no upgrade script).
 - **1.0.3** (2026-11-11) One transaction id. The Direct API order id is the Transaction ID the merchant dashboard shows, and every Direct API answer carries `transaction_id` equal to it. The order payment's Transaction ID is `transaction_id` (falling back to the Direct order id); `synrapay_transaction_id` is no longer read. Webhook settlement takes the Transaction ID from the webhook body's `transactionId` and no longer makes a status read for it. The order message and the admin order card list Merchant order ID, Transaction ID and auth code; the "SynraPay order ID" line is gone because it would repeat the Transaction ID. No schema change (no upgrade script).
 - **1.0.2** — Payment ids match the SynraPay merchant dashboard: the order payment's Transaction ID is SynraPay's Transaction ID (`synrapay_transaction_id`, falling back to the Direct order id), and the webhook makes one best-effort status read to fetch it; an order placed before it arrived has its payment Transaction ID corrected later. The order message and the admin order card list Merchant order ID, Transaction ID, SynraPay order ID and auth code. Gateway references are SynraPay-internal: the module no longer stores or shows one (the old `gateway_ref` column is kept but not written). New `txn_id` / `auth_code` columns (upgrade script `upgrade-1.0.2.php`). A failed or declined payment now stays on screen with a "Payment failed" panel and a **Retry payment** button instead of the card form re-opening after about a second (QA BUG_006).

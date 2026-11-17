@@ -36,7 +36,7 @@ class SynraPay extends PaymentModule
     {
         $this->name = 'synrapay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.0.4';
+        $this->version = '1.0.5';
         $this->author = 'SynraPay';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '8.0.2', 'max' => _PS_VERSION_];
@@ -48,7 +48,7 @@ class SynraPay extends PaymentModule
         parent::__construct();
 
         $this->displayName = $this->l('SynraPay — Credit / Debit card');
-        $this->description = $this->l('Visa, Mastercard and American Express on your checkout page with SynraPay\'s secure card fields (hosted session).');
+        $this->description = $this->l('Visa, Mastercard and American Express on your checkout page with SynraPay\'s secure card fields.');
         $this->confirmUninstall = $this->l('Remove SynraPay? Orders already paid keep their SynraPay references.');
     }
 
