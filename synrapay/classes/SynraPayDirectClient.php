@@ -24,14 +24,14 @@ if (class_exists('SynraPayDirectClient', false)) {
 
 class SynraPayDirectClient
 {
-    const VERSION = '1.0.5';
+    const VERSION = '1.0.6';
 
     const ENVS = [
         // 'sdk' is SynraPay's public script for merchant pages (hosted-session.js). It loads the card
         // fields itself; sdk.js is internal and refuses a merchant's page. 'token' is the environment
         // name inside that environment's client tokens.
-        'sandbox' => ['api' => 'https://sandbox-api.synrapay.com/v1', 'sdk' => 'https://sandbox.js.synrapay.com/direct/v1/hosted-session.js', 'label' => 'Sandbox', 'token' => 'sandbox'],
-        'live'    => ['api' => 'https://api.synrapay.com/v1',         'sdk' => 'https://js.synrapay.com/direct/v1/hosted-session.js',         'label' => 'Live',    'token' => 'production'],
+        'sandbox' => ['api' => 'https://sandbox-api.synrapay.com/v1', 'sdk' => 'https://sandbox.js.synrapay.com/hosted-session.js', 'label' => 'Sandbox', 'token' => 'sandbox'],
+        'live'    => ['api' => 'https://api.synrapay.com/v1',         'sdk' => 'https://js.synrapay.com/hosted-session.js',         'label' => 'Live',    'token' => 'production'],
     ];
 
     // The prestashop door of SynraPay's plugin platform (/v1/direct/plugins/prestashop/*):
@@ -208,12 +208,12 @@ class SynraPayDirectClient
         return $msg;
     }
 
-    /** 'paid' | 'failed' | 'pending' — mirrors the WooCommerce confirm rules (awaiting_mastercard is not final). */
+    /** 'paid' | 'failed' | 'pending' — mirrors the WooCommerce confirm rules (awaiting_confirmation is not final). */
     public static function classify(array $data): string
     {
         $status   = strtoupper((string) ($data['status'] ?? ''));
-        $awaiting = isset($data['confirmation']) && $data['confirmation'] === 'awaiting_mastercard';
-        if (!$awaiting && in_array($status, ['CAPTURED', 'AUTHORIZED'], true)) {
+        $awaiting = isset($data['confirmation']) && $data['confirmation'] === 'awaiting_confirmation';
+        if (!$awaiting && in_array($status, ['CAPTURED'], true)) {
             return 'paid';
         }
         if (!$awaiting && in_array($status, ['FAILED', 'CANCELLED', 'EXPIRED', 'DECLINED'], true)) {
@@ -226,7 +226,7 @@ class SynraPayDirectClient
     public static function evidence(array $data): bool
     {
         // transaction_id is not evidence: every status answer carries it (it equals order_id).
-        return (isset($data['confirmation']) && $data['confirmation'] === 'awaiting_mastercard')
+        return (isset($data['confirmation']) && $data['confirmation'] === 'awaiting_confirmation')
             || !empty($data['gateway_transaction_id']);
     }
 

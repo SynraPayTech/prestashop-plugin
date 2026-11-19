@@ -64,7 +64,7 @@ class SynrapayWebhookModuleFrontController extends SynrapayAbstractModuleFrontCo
             return;
         }
         $status   = strtolower((string) ($body['status'] ?? ''));
-        $awaiting = isset($body['confirmation']) && $body['confirmation'] === 'awaiting_mastercard';
+        $awaiting = isset($body['confirmation']) && $body['confirmation'] === 'awaiting_confirmation';
         if (!$awaiting && in_array($status, ['success', 'captured', 'authorized', 'paid'], true)) {
             $cart = new Cart((int) $link['id_cart']);
             if (!Validate::isLoadedObject($cart)) {

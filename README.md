@@ -7,7 +7,7 @@ server.
 
 | | |
 |---|---|
-| 📦 Module | `synrapay` v1.0.5 — folder [`synrapay/`](./synrapay), zip `synrapay.zip` |
+| 📦 Module | `synrapay` v1.0.6 — folder [`synrapay/`](./synrapay), zip `synrapay.zip` |
 | 🛒 PrestaShop | 8.0.2 or greater |
 | 🐘 PHP | 7.4 or greater |
 | 🔐 Integration | SynraPay Direct API — hosted session, signature v2 |
@@ -162,6 +162,7 @@ dist/                                     ready-to-install zip
 
 ## 📝 Changelog
 
+- **1.0.6** (2026-11-19) The card form's script is loaded from SynraPay's one public address (`https://js.synrapay.com/hosted-session.js`, Sandbox: `https://sandbox.js.synrapay.com/hosted-session.js`). An order is marked paid only when SynraPay reports it CAPTURED; AUTHORIZED is not paid. A payment SynraPay still marks `awaiting_confirmation` is not final: the order waits for the webhook. No schema change (no upgrade script).
 - **1.0.5** (2026-11-17) The plugin calls its own door on SynraPay (`/v1/direct/plugins/prestashop`): the bank's 3-D Secure check opens over the checkout page. The module description no longer says "(hosted session)". No schema change (no upgrade script).
 - **1.0.4** (2026-11-14) SynraPay made its card-fields script (sdk.js) internal: a store page that loads it directly now gets "Something went wrong" and no card form. The card form is loaded through SynraPay's public hosted-session.js (SynraHostedSession.mount) instead. Environments are Sandbox and Live only (a store saved on Develop runs as Sandbox). The webhook secret is the one "Webhook secret (KEY_SHA512)" from Developers → API Keys; the per-endpoint Signing secret is gone from the portal. No schema change (no upgrade script).
 - **1.0.3** (2026-11-11) One transaction id. The Direct API order id is the Transaction ID the merchant dashboard shows, and every Direct API answer carries `transaction_id` equal to it. The order payment's Transaction ID is `transaction_id` (falling back to the Direct order id); `synrapay_transaction_id` is no longer read. Webhook settlement takes the Transaction ID from the webhook body's `transactionId` and no longer makes a status read for it. The order message and the admin order card list Merchant order ID, Transaction ID and auth code; the "SynraPay order ID" line is gone because it would repeat the Transaction ID. No schema change (no upgrade script).
